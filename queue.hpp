@@ -2,12 +2,13 @@
 #include <exception>
 using namespace std;
 
-template<class T> class queue{
-    struct node{
-        T value;
+template<class Type> class queue{
+    class node{
+        public:
+        Type value;
         node *next;
 
-        node(T value){
+        node(Type value){
             this->value = value;
             next = NULL;
         }
@@ -15,7 +16,8 @@ template<class T> class queue{
             next = NULL;
         }
         ~node(){
-            delete next ;
+          // cout<<"called "<<value<<endl;
+            delete next;
         }
     };
     node *_front;
@@ -28,7 +30,6 @@ template<class T> class queue{
         N = 0;
     }
     ~queue(){
-        /* ... */
         delete _front;
     }
 
@@ -38,7 +39,7 @@ template<class T> class queue{
     bool empty(){
         return (_front == NULL);
     }
-    void push(T value){
+    void push(Type value){
         if( _front == NULL ){
             _front = new node(value);
             _back = _front ;
@@ -49,35 +50,40 @@ template<class T> class queue{
         }
         ++N;
     }
-    T pop(){
+    Type pop(){
         if(_front == NULL) throw underflow_error("empty queue");
-        T temp = _front->value;
+        Type temp = _front->value;
+        node *t = _front;
         _front = _front->next;
         --N;
+        
+        t->next = NULL;
+        delete t;
+
         return temp;
     }
-    T& front(){
+    Type& front(){
         if(_front == NULL) throw underflow_error("empty queue");
         return _front->value;
     }
-    T& back(){
+    Type& back(){
         if( _back == NULL ) throw underflow_error("empty queue");
         return _back->value;
     }
 };
 
-template<class T> class array_queue{
+template<class Type> class array_queue{
     static int const CAPACITY = 4;
     int _front;
     int _back;
     int cap ;
     int N ;
-    T *a;
+    Type *a;
     public:
     array_queue(int cap=CAPACITY){
         this->cap = cap;
         N = 0;
-        a = new T[cap];
+        a = new Type[cap];
         _front = 0;
         _back = 0;
     }
@@ -91,10 +97,10 @@ template<class T> class array_queue{
     bool empty(){
         return (N==0);
     }
-    void push(T value){
+    void push(Type value){
         if( size() == cap ){
             int nCap = 2*cap;
-            T* temp = new T[nCap];
+            Type* temp = new Type[nCap];
             int i=0;
             temp[i++] = a[_front]; // when full, front == back... 
             _front = (_front+1)%cap;
@@ -114,12 +120,12 @@ template<class T> class array_queue{
         _back = (_back+1)%cap;
         ++N;
     }
-    T pop(){
+    Type pop(){
         if( empty() ) throw underflow_error("empty queue");
 
         if( size() > CAPACITY && size() == cap/4 ){            
             int nCap = (cap/2 > CAPACITY) ? cap/2: CAPACITY;
-            T* temp = new T[nCap] ;
+            Type* temp = new Type[nCap] ;
             int i=0;
             while( _front != _back ){
                 temp[i++] = a[_front];
@@ -133,17 +139,17 @@ template<class T> class array_queue{
             _back = i;
         }
 
-        T t = a[_front];
+        Type t = a[_front];
         _front = (_front+1)%cap;
         --N;
         return t;
     }
-    T& front(){
+    Type& front(){
         cout<<_front<<endl;
         if( empty() ) throw underflow_error("empty queue");
         return a[_front];
     }
-    T& back(){
+    Type& back(){
         cout<<_back<<endl;
         if( empty() ) throw underflow_error("empty queue");
         return a[_back] ;
@@ -153,13 +159,26 @@ template<class T> class array_queue{
 
 void test(){
     // testing ;
-
     queue<int> qq;
     array_queue<int> q;
 
-    while(1){
-
-
-
-    }
+    qq.push(1);
+    qq.push(2);
+    qq.push(3);
+    qq.push(3);
+    qq.push(434);
+    qq.push(21);
+    qq.push(234);
+    cout<<qq.pop()<<endl;
+    cout<<qq.pop()<<endl; 
+    cout<<qq.pop()<<endl;
+    cout<<qq.pop()<<endl;
+    cout<<qq.pop()<<endl;
+    cout<<qq.pop()<<endl;
+    cout<<qq.pop()<<endl;
+    cout<<qq.pop()<<endl;
+    cout<<qq.pop()<<endl;
+    cout<<qq.pop()<<endl;
+    cout<<qq.pop()<<endl;
+    cout<<qq.pop()<<endl;
 }
