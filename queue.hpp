@@ -158,7 +158,6 @@ template<class Type> class array_queue{
 
 
 void test(){
-    // testing ;
     queue<int> qq;
     array_queue<int> q;
 
